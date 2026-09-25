@@ -7,12 +7,14 @@ Landing page B2B da Clínica PACE: site estático, responsivo e sem dependência
 ```
 pace-site/
 ├── index.html          # página completa
+├── favicon.ico         # favicon (navegadores)
+├── site.webmanifest    # ícones para Android / atalho na tela inicial
 ├── css/
 │   └── styles.css      # base, animações, estados e regras responsivas
 ├── js/
 │   └── main.js         # menus hambúrguer e formulários (desktop e celular)
 └── assets/
-    └── img/            # logos e fotos
+    └── img/            # logos, fotos e ícones (favicon, apple-touch-icon)
 ```
 
 ## Rodando localmente
