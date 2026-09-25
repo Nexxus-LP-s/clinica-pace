@@ -1,40 +1,40 @@
 // PACE na sua Empresa — interações
 (function () {
-  // Menu mobile
-  var toggle = document.getElementById('menu-toggle');
-  var menu = document.getElementById('menu-mobile');
-  function setMenu(open) {
-    if (!toggle || !menu) return;
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  // ---- Menus hambúrguer (desktop/tablet e celular) ----
+  var toggles = Array.prototype.slice.call(document.querySelectorAll('[data-menu-toggle]'));
+  function setMenu(btn, open) {
+    var menu = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!menu) return;
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
     menu.hidden = !open;
   }
-  if (toggle) {
-    toggle.addEventListener('click', function () {
-      setMenu(toggle.getAttribute('aria-expanded') !== 'true');
+  function closeAll() { toggles.forEach(function (b) { setMenu(b, false); }); }
+  toggles.forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setMenu(btn, btn.getAttribute('aria-expanded') !== 'true');
     });
-  }
-  document.querySelectorAll('[data-close-menu]').forEach(function (link) {
-    link.addEventListener('click', function () { setMenu(false); });
   });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') setMenu(false);
+  document.querySelectorAll('[data-close-menu]').forEach(function (a) {
+    a.addEventListener('click', closeAll);
   });
-  window.addEventListener('resize', function () {
-    if (window.innerWidth > 768) setMenu(false);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.mmenu') && !e.target.closest('[data-menu-toggle]')) closeAll();
   });
+  window.addEventListener('resize', closeAll);
 
-  // Formulário de contato
-  var form = document.getElementById('form-contato');
-  if (form) {
+  // ---- Formulários de contato ----
+  function ligarFormulario(formId, camposId, sucessoId) {
+    var form = document.getElementById(formId);
+    if (!form) return;
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
-
       var dados = Object.fromEntries(new FormData(form).entries());
 
       // TODO: integrar com o destino dos leads (CRM, e-mail, planilha etc.).
-      // Exemplo:
       // fetch('https://SEU-ENDPOINT', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
@@ -42,8 +42,10 @@
       // });
       console.log('Lead PACE:', dados);
 
-      document.getElementById('form-fields').hidden = true;
-      document.getElementById('form-success').hidden = false;
+      document.getElementById(camposId).hidden = true;
+      document.getElementById(sucessoId).hidden = false;
     });
   }
+  ligarFormulario('form-contato', 'form-fields', 'form-success');      // desktop / tablet
+  ligarFormulario('m-form-contato', 'm-form-fields', 'm-form-success'); // celular
 })();

@@ -10,7 +10,7 @@ pace-site/
 ├── css/
 │   └── styles.css      # base, animações, estados e regras responsivas
 ├── js/
-│   └── main.js         # menu mobile e envio do formulário
+│   └── main.js         # menus hambúrguer e formulários (desktop e celular)
 └── assets/
     └── img/            # logos e fotos
 ```
@@ -35,21 +35,32 @@ python3 -m http.server 8080
 ## Formulário (pendente de integração)
 
 O formulário valida os campos e mostra a mensagem de confirmação, mas **ainda não envia os dados**.
-Para conectar, edite o trecho marcado com `TODO` em `js/main.js`. Algumas opções:
+Os dois formulários (desktop e celular) usam a mesma função. Para conectar, edite o trecho marcado com `TODO` em `js/main.js`. Algumas opções:
 
 - Endpoint próprio / CRM (RD Station, HubSpot, Pipedrive) via `fetch`.
 - Serviços sem back-end, como Formspree ou Getform.
 - Google Apps Script salvando numa planilha.
 
-## Breakpoints
+## Layouts e breakpoints
 
-| Largura       | Comportamento                                             |
-|---------------|-----------------------------------------------------------|
-| > 1100 px     | Layout desktop completo (conteúdo centralizado em 1200 px) |
-| ≤ 1100 px     | Hero e seção do colaborador empilhados                    |
-| ≤ 900 px      | Grids em uma coluna                                       |
-| ≤ 768 px      | Layout mobile + menu hambúrguer                           |
-| ≤ 380 px      | Ajustes para telas muito estreitas                        |
+A página tem dois blocos de layout no `index.html`:
+
+- `.view-desktop`: desktop e tablet (acima de 640 px), com ajustes progressivos.
+- `.view-mobile`: layout dedicado para celular (até 640 px), seguindo a referência mobile do design.
+
+| Largura     | Comportamento                                              |
+|-------------|------------------------------------------------------------|
+| > 1100 px   | Layout desktop completo (conteúdo centralizado em 1200 px) |
+| ≤ 1100 px   | Topo e seção do colaborador empilhados                     |
+| ≤ 900 px    | Grids em uma coluna, menu hambúrguer                       |
+| ≤ 640 px    | Layout celular dedicado, com menu hambúrguer e tipografia fluida |
+| ≤ 374 px    | Ajustes para telas muito estreitas                         |
+
+Tipografia e espaçamentos são fluidos (`clamp()`), acompanhando a largura da tela.
+
+Testado sem rolagem horizontal em 320, 360, 390, 480, 600, 700, 820, 1024 e 1440 px.
+
+Se algum texto for alterado, lembre de alterar nos dois blocos (desktop e celular).
 
 ## Observações
 
